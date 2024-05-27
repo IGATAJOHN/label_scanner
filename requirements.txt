@@ -1,5 +1,6 @@
 flask
 flask_sqlalchemy
+Flask-Migrate
 flask_paginate
 gunicorn
 opencv-python
