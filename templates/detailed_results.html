@@ -1,0 +1,59 @@
+{% extends "home.html" %}
+{% block title %}Detailed Results{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Detailed Results</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Keywords</th>
+                <th scope="col">Description</th>
+                <th scope="col">Upload Count</th>
+                <th scope="col">Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for label in labels %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ label.product_name }}</td>
+                <td>{{ label.brand }}</td>
+                <td>{{ label.keywords }}</td>
+                <td>{{ label.description }}</td>
+                <td>{{ label.upload_count }}</td>
+                <td><img src="{{ url_for('static', filename=label.image_path) }}" alt="Image" width="100"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if prev_url %}
+            <li class="page-item">
+                <a class="page-link" href="{{ prev_url }}" aria-label="Previous">
+                    <span aria-hidden="true">Previous</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">Previous</span>
+                </span>
+            </li>
+            {% endif %}
+            {% if next_url %}
+            <li class="page-item">
+                <a class="page-link" href="{{ next_url }}" aria-label="Next">
+            Next
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

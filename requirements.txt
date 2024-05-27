@@ -1,0 +1,7 @@
+flask
+flask_sqlalchemy
+flask_paginate
+gunicorn
+opencv-python
+numpy
+flask_login

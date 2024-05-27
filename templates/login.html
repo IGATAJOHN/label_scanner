@@ -1,0 +1,20 @@
+{% extends "home.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>Login</h2>
+            <form method="post">
+                <div class="form-outline mb-4">
+                    <input type="text" id="username" name="username" class="form-control" required>
+                    <label class="form-label" for="username">Username</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <label class="form-label" for="password">Password</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

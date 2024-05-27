@@ -1,0 +1,110 @@
+{% extends "home.html" %}
+{% block title %}Upload Image{% endblock %}
+{% block content %}
+<div class="container">
+    
+    <div class="row">
+      <!-- Static Image Upload Form -->
+      <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Upload Image</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" action="{{ url_for('upload_image') }}">
+                    <div class="mb-3">
+                        <label for="product_name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="product_name" name="product_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand" class="form-label">Brand</label>
+                        <input type="text" class="form-control" id="brand" name="brand" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Image</label>
+                        <input class="form-control" type="file" id="image" name="image" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Capture Section -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Or take a live photograph</h4>
+            </div>
+            <div class="card-body">
+                <button id="start-camera" class="btn btn-secondary mb-3">Start Camera</button>
+                <video id="video" width="100%" height="auto" autoplay class="mb-3" style="display: none;"></video>
+                <button id="snap" class="btn btn-primary mb-3" style="display: none;">Capture</button>
+                <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+                <form id="photoForm" method="post" enctype="multipart/form-data" action="{{ url_for('upload_image') }}">
+                    <input type="hidden" name="photo" id="photo">
+                    <input type="hidden" name="product_name" id="photo_product_name">
+                    <input type="hidden" name="brand" id="photo_brand">
+                    <button type="submit" class="btn btn-primary">Upload Photo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    Swal.fire({
+                        icon: '{{ category }}',
+                        title: '{{ message }}',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+<script>
+    // Access the webcam
+    const video = document.getElementById('video');
+    const startCameraButton = document.getElementById('start-camera');
+    // Get access to the camera
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+        });
+    }
+    startCameraButton.addEventListener('click', function() {
+        // Get access to the camera
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+                video.style.display = 'block';
+                snap.style.display = 'block';
+                startCameraButton.style.display = 'none';
+            });
+        }
+    });
+
+
+    // Elements for taking the snapshot
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const snap = document.getElementById('snap');
+    const photoInput = document.getElementById('photo');
+    const photoForm = document.getElementById('photoForm');
+
+    // Trigger photo take
+    snap.addEventListener("click", function() {
+        context.drawImage(video, 0, 0, 320, 240);
+        const dataURL = canvas.toDataURL('image/png');
+        photoInput.value = dataURL;
+        photoForm.style.display = 'block';
+    });
+</script>
+{% endblock %}
